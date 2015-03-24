@@ -23,31 +23,31 @@ gulp.task('coffee', function() {
     .pipe(coffee({bare: true})
 //           .on('error', gutil.log)
          )
-    .pipe(gulp.dest('./public/'))
+    .pipe(gulp.dest('./public/js/'))
 });
 
 gulp.task('express', function() {
   var express = require('express');
   var app = express();
   app.use(require('connect-livereload')({port: 4002}));
-  app.use(express.static(__dirname));
+  app.use(express.static(__dirname+'/public'));
   app.listen(4000);
 });
 
 gulp.task('styles', function() {
-  return sass('sass/', { style: 'expanded' })
-     .pipe(gulp.dest('css'))
+  return sass('./', { style: 'expanded' })
+//      .pipe(gulp.dest('css'))
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
-    .pipe(gulp.dest('css'));
+    .pipe(gulp.dest('public/css'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch('sass/*.scss', ['styles']);
+  gulp.watch('./*.scss', ['styles']);
   gulp.watch('*.coffee', ['coffee']);
   gulp.watch('*.jade', ['templates']);
-  gulp.watch('*.html', notifyLiveReload);
-  gulp.watch('css/*.css', notifyLiveReload);
+  gulp.watch('./public/**', notifyLiveReload);
+//   gulp.watch('css/*.css', notifyLiveReload);
 });
 
 gulp.task('livereload', function() {
