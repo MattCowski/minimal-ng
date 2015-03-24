@@ -4,7 +4,19 @@ var gulp = require('gulp'),
     minifycss = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     tinylr = require('tiny-lr')(),
-    coffee = require('gulp-coffee');
+    coffee = require('gulp-coffee'),
+    jade = require('gulp-jade');
+
+
+gulp.task('templates', function() {
+  var YOUR_LOCALS = {};
+
+  gulp.src('./*.jade')
+    .pipe(jade({
+      locals: YOUR_LOCALS
+    }))
+    .pipe(gulp.dest('./public/'))
+});
 
 gulp.task('coffee', function() {
   gulp.src('./*.coffee')
@@ -32,7 +44,8 @@ gulp.task('styles', function() {
 
 gulp.task('watch', function() {
   gulp.watch('sass/*.scss', ['styles']);
-  gulp.watch('*.coffee', ['coffee'])
+  gulp.watch('*.coffee', ['coffee']);
+  gulp.watch('*.jade', ['templates']);
   gulp.watch('*.html', notifyLiveReload);
   gulp.watch('css/*.css', notifyLiveReload);
 });
