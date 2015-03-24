@@ -3,7 +3,16 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     minifycss = require('gulp-minify-css'),
     rename = require('gulp-rename'),
-    tinylr = require('tiny-lr')();
+    tinylr = require('tiny-lr')(),
+    coffee = require('gulp-coffee');
+
+gulp.task('coffee', function() {
+  gulp.src('./*.coffee')
+    .pipe(coffee({bare: true})
+//           .on('error', gutil.log)
+         )
+    .pipe(gulp.dest('./public/'))
+});
 
 gulp.task('express', function() {
   var express = require('express');
@@ -23,6 +32,7 @@ gulp.task('styles', function() {
 
 gulp.task('watch', function() {
   gulp.watch('sass/*.scss', ['styles']);
+  gulp.watch('*.coffee', ['coffee'])
   gulp.watch('*.html', notifyLiveReload);
   gulp.watch('css/*.css', notifyLiveReload);
 });
